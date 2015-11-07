@@ -9,7 +9,7 @@ object Main extends App {
       t
     }
   
-  val n = 2
+  /*val n = 2
   val accounts = for (i <- 0 to n) yield {new Account(Math.round(Math.random*1000): Double)}
 	val rand = new java.util.Random(System.nanoTime());
 	var randInt = 0;
@@ -21,7 +21,7 @@ object Main extends App {
 		val t = thread(Bank.transaction(accounts(randInt), accounts(randInt2), Math.round(Math.random*50): Double))
 	}
 
-  	accounts.foreach{acc => println(acc.getBalanceAmount)}
+  	accounts.foreach{acc => println(acc.getBalanceAmount)}*/
   
   
 }

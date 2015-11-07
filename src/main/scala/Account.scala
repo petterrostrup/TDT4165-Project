@@ -1,33 +1,32 @@
 import exceptions._
-class Account(initialBalance: Double, val uid: Int = Bank getUniqueId) {
-  
-  var balance : Double = initialBalance
 
-	def withdraw(amount: Double) {
-		if (amount >= 0)
-			if (amount > balance)
-				throw new NoSufficientFundsException
-			else
-				this.synchronized {
-					balance -= amount
-				}
-		else
-			throw new IllegalAmountException
-	}
 
-	def deposit(amount: Double) {
-		if (amount >= 0)
-			this.synchronized {
-				balance += amount;
-			}
-		else
-			throw new IllegalAmountException
-	}
+class Account(val bank: Bank, initialBalance: Double) {
 
-	def getBalanceAmount: Double = {
-		this.synchronized {
-			balance
+	class Balance(var amount: Double) {}
+
+	val balance = new Balance(initialBalance)
+	val uid = bank.generateAccountId
+
+	def withdraw(amount: Double): Unit = {
+		balance.synchronized {
+			if (balance.amount - amount < 0) throw new NoSufficientFundsException()
+			if (amount <= 0) throw new IllegalAmountException()
+			balance.amount -= amount
 		}
 	}
+
+	def deposit(amount: Double): Unit = {
+		balance.synchronized {
+			if (amount <= 0) throw new IllegalAmountException()
+			balance.amount += amount
+		}
+	}
+
+	def transferTo(account: Account, amount: Double) = {
+		bank addTransactionToQueue (this, account, amount)
+	}
+
+	def getBalanceAmount: Double = balance.amount
 
 }
