@@ -22,7 +22,7 @@ class TransactionQueue {
 
 
   // Return an iterator to allow you to iterate over the queue
-  def iterator: Iterator[Transaction] = ???
+  def iterator: Iterator[Transaction] = queue.iterator
 }
 
 class Transaction(val transactionsQueue: TransactionQueue,
