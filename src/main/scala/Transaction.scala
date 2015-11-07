@@ -20,9 +20,8 @@ class TransactionQueue {
   // Return the first element from the queue without removing it
   def peek: Transaction = queue.front;
 
-
   // Return an iterator to allow you to iterate over the queue
-  def iterator: Iterator[Transaction] = ???
+  def iterator: Iterator[Transaction] = queue.toIterator;
 }
 
 class Transaction(val transactionsQueue: TransactionQueue,
@@ -35,23 +34,44 @@ class Transaction(val transactionsQueue: TransactionQueue,
   var status: TransactionStatus.Value = TransactionStatus.PENDING
 
   override def run: Unit = {
-    
+
     def doTransaction() = {
       from withdraw amount
       to deposit amount
     }
-    
-    if (from.uid < to.uid) from synchronized {
-      to synchronized {
-        doTransaction
-      }
-    } else to synchronized {
-      from synchronized {
-        doTransaction
-      }
-    }
-    
-    //Extend this method to satisfy new requirements.
+    val transaction = transactionsQueue.pop;
+    var i = 0
+    var transaction_passed = false;
+    while((i < allowedAttemps) && (!transaction_passed)){
+      try{
+        if (from.uid < to.uid) from synchronized {
+          to synchronized {
+            doTransaction
+          }
+        } else to synchronized {
+          from synchronized {
+            doTransaction
+          }
+        }
+        transaction_passed = true;
 
+      } catch {
+        case ex: IllegalAmountException => {
+        }
+        case ex: NoSufficientFundsException => {
+        }
+      }
+      i = i + 1
+    }
+
+    if (transaction_passed){
+      this.status = TransactionStatus.SUCCESS
+    } else {
+      this.status = TransactionStatus.FAILED
+    }
+
+    processedTransactions.push(transaction)
   }
 }
+
+
