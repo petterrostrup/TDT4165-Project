@@ -20,6 +20,7 @@ class TransactionQueue {
   // Return the first element from the queue without removing it
   def peek: Transaction = queue.front;
 
+
   // Return an iterator to allow you to iterate over the queue
   def iterator: Iterator[Transaction] = ???
 }

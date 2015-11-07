@@ -21,7 +21,7 @@ class Bank(val allowedAttempts: Integer = 3) {
   }
 
   private def processTransactions(): Unit = {
-    
+
     while (true) {
       // This will block until a connection comes in.
       if (!transactionsQueue.isEmpty)
