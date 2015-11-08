@@ -14,15 +14,15 @@ class AccountTests extends FunSuite {
   test("Test 02: Invalid account withdrawal should throw exception") {
     val acc = new Account(bank, 500)
     intercept[NoSufficientFundsException] {
-		  acc.withdraw(750)
-		}
+      acc.withdraw(750)
+    }
   }
 
   test("Test 03: Withdrawal of negative amount should throw exception") {
     val acc = new Account(bank, 500)
     intercept[IllegalAmountException] {
-		  acc.withdraw(-100)
-		}
+      acc.withdraw(-100)
+    }
   }
 
   test("Test 04: Valid account deposit") {
@@ -34,8 +34,8 @@ class AccountTests extends FunSuite {
   test("Test 05: Deposit of negative amount should throw exception") {
     val acc = new Account(bank, 500)
     intercept[IllegalAmountException] {
-		  acc.deposit(-50)
-		}
+      acc.deposit(-50)
+    }
   }
 
   test("Test 06: Correct balance amount after several withdrawals and deposits") {
@@ -163,18 +163,18 @@ class AccountTransferTests extends FunSuite {
     var failed = 0
     for (x <- 1 to 100) {
       val bank = new Bank(allowedAttempts = 3)
-  
+
       val acc1 = new Account(bank, 100)
       val acc2 = new Account(bank, 100)
       val acc3 = new Account(bank, 100)
-  
+
       for (i <- 1 to 6) { acc1 transferTo (acc2, 50) }
       for (j <- 1 to 2) { acc3 transferTo (acc1, 50) }
-      
+
       while (bank.getProcessedTransactionsAsList.size != 8) {
         Thread.sleep(100)
       }
-  
+
       if (!(acc1.getBalanceAmount == 0
         && acc2.getBalanceAmount == 300
         && acc3.getBalanceAmount == 0)) failed += 1
@@ -187,14 +187,14 @@ class AccountTransferTests extends FunSuite {
     var failed = 0
     for (x <- 1 to 100) {
       val bank = new Bank(allowedAttempts = 1)
-  
+
       val acc1 = new Account(bank, 100)
       val acc2 = new Account(bank, 100)
       val acc3 = new Account(bank, 100)
-  
+
       for (i <- 1 to 6) { acc1 transferTo (acc2, 50) }
       for (j <- 1 to 2) { acc3 transferTo (acc1, 50) }
-  
+
       while (bank.getProcessedTransactionsAsList.size != 8) {
         Thread.sleep(100)
       }
